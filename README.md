@@ -15,7 +15,7 @@ Headlamp Plugin showing health and status of External Secrets Operator resrouces
 
 ## Screenshots
 
-![alt text](/images/screen-0.png)
-![alt text](/images/screen-1.png)
-![alt text](/images/screen-2.png)
-![alt text](/images/screen-3.png)
+![alt text](/.docs/screen-0.png)
+![alt text](/.docs/screen-1.png)
+![alt text](/.docs/screen-2.png)
+![alt text](/.docs/screen-3.png)
