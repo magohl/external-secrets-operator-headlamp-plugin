@@ -68,12 +68,12 @@ export function ExternalSecretList() {
           'age',
           {
             id: 'sync',
-            label: 'Force Sync',
+            label: 'Manual Refresh',
             sort: false,
             getValue: null,
             render: item => (
               <ActionButton
-                description="Force sync this External Secret"
+                description="Refresh this External Secret now!"
                 icon="mdi:refresh"
                 onClick={() => item.forceSync()}
               />

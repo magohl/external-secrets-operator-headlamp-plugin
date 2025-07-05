@@ -13,7 +13,7 @@ export function RenderExternalSecretSyncActionButton(item: ExternalSecret) {
   return (
     <ActionButton
       key="sync-action"
-      description="Force sync this External Secret"
+      description="Refresh this External Secret"
       icon="mdi:refresh"
       onClick={() => item.forceSync()}
     />
