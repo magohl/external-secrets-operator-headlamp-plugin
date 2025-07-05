@@ -55,7 +55,7 @@ jobs:
       - name: Create Archive
         run: |
           mkdir -p external-secrets-operator-headlamp-plugin
-          cp package.json dist/*.js dist/*.wasm.gz external-secrets-operator-headlamp-plugin
+          cp package.json dist/*.js external-secrets-operator-headlamp-plugin
           tar -czf ${{ env.RELEASE_TAR }} external-secrets-operator-headlamp-plugin
 
       - name: Calculate Checksum
