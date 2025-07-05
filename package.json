@@ -1,6 +1,6 @@
 {
   "name": "external-secrets-operator",
-  "version": "0.1.0-beta3",
+  "version": "0.1.0-beta4",
   "description": "Headlamp plugin for External Secrets Operator",
   "scripts": {
     "start": "headlamp-plugin start",
