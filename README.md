@@ -1,25 +1,21 @@
-# external-secrets-operator
+# External Secrets Operator Headlamp Plugin
 
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/external-secrets-operator-headlamp-plugin)](https://artifacthub.io/packages/search?repo=external-secrets-operator-headlamp-plugin)
 
-- Headlamp Plugin showing health and status of External Secrets Operator resrouces
+Headlamp Plugin showing health and status of External Secrets Operator resrouces
 
-## Development environment
+- Overview Page
+- External Secret
+  - Built in `Manual Refresh` as described in https://external-secrets.io/latest/api/externalsecret/#manual-refresh
+- Secret Store
+- Cluster Secret Store
+- Cluster External Secret
+- Push Secret
+- Cluster Push Secret
 
-### Headlamp development
+## Screenshots
 
-In separate consoles start
-
-```bash
-make run-backend HEADLAMP_PLUGINS_DIR=../external-secrets-operator-headlamp-plugin
-```
-
-```bash
-make run-frontend
-```
-
-And in this plugin folder run
-
-```bash
-npm start
-```
+![alt text](/images/screen-0.png)
+![alt text](/images/screen-1.png)
+![alt text](/images/screen-2.png)
+![alt text](/images/screen-3.png)
