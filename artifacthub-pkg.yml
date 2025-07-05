@@ -2,8 +2,8 @@ version: 0.1.0-beta1
 name: external-secrets-operator
 displayName: External Secrets Operator
 createdAt: '2025-07-05T05:35:50Z'
-logoURL: <Your Plugin Logo URL>
-description: <Your Plugin Description>
+logoURL: https://raw.githubusercontent.com/magohl/external-secrets-operator-headlamp-plugin/refs/heads/main/src/images/logo.png
+description: Headlamp plugin for External Secrets Operator
 annotations:
   headlamp/plugin/archive-url: <Your Plugins Archive URL>
   headlamp/plugin/archive-checksum: <Checksum of the tarball>
