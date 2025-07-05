@@ -82,7 +82,6 @@ export class ExternalSecret extends KubeObject<ExternalSecretCR> {
     return this._apiVersion || 'external-secrets.io/v1';
   }
 
-
   static get detailsRoute() {
     return '/external-secrets-operator/externalsecret/:namespace/:name';
   }
@@ -149,26 +148,23 @@ export class ExternalSecret extends KubeObject<ExternalSecretCR> {
     return this.status?.conditions?.find(c => c.type === 'Ready')?.message;
   }
 
-
   async addAnnotation(key: string, value: string): Promise<void> {
     return this.patch({
       metadata: {
         annotations: {
-          [key]: value
-        }
-      }
+          [key]: value,
+        },
+      },
     });
   }
 
   async addAnnotations(annotations: Record<string, string>): Promise<void> {
     return this.patch({
       metadata: {
-        annotations: annotations
-      }
+        annotations: annotations,
+      },
     });
   }
-
-
 
   async forceSync(): Promise<void> {
     try {
@@ -180,28 +176,25 @@ export class ExternalSecret extends KubeObject<ExternalSecretCR> {
     } catch (error) {
       console.error('Failed to add force-sync annotation:', error);
     }
-  };
+  }
 
-static getReadyCount(secrets: ExternalSecret[]): { ready: number; total: number } {
-  const ready = secrets.filter(secret => secret.readyCondition === 'True').length;
-  return { ready, total: secrets.length };
+  static getReadyCount(secrets: ExternalSecret[]): { ready: number; total: number } {
+    const ready = secrets.filter(secret => secret.readyCondition === 'True').length;
+    return { ready, total: secrets.length };
+  }
+
+  static getNamespaceDistribution(
+    secrets: ExternalSecret[]
+  ): Array<{ name: string; value: number }> {
+    const namespaceCounts = new Map<string, number>();
+    secrets.forEach(secret => {
+      const namespace = secret.metadata.namespace || 'default';
+      namespaceCounts.set(namespace, (namespaceCounts.get(namespace) || 0) + 1);
+    });
+
+    return Array.from(namespaceCounts.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([name, value]) => ({ name, value }));
+  }
 }
-
-static getNamespaceDistribution(secrets: ExternalSecret[]): Array<{ name: string; value: number }> {
-  const namespaceCounts = new Map<string, number>();
-  secrets.forEach(secret => {
-    const namespace = secret.metadata.namespace || 'default';
-    namespaceCounts.set(namespace, (namespaceCounts.get(namespace) || 0) + 1);
-  });
-  
-  return Array.from(namespaceCounts.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
-    .map(([name, value]) => ({ name, value }));
-}
-
-
-
-}
-
-

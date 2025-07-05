@@ -1,4 +1,5 @@
 name: Headlamp Plugin Release
+
 env:
   REGISTRY: 'ghcr.io'
   NODE_VERSION: '22.X'

@@ -225,66 +225,68 @@ export class SecretStore extends KubeObject<SecretStoreCR> {
   // Get provider-specific configuration details
   getProviderConfig(): any {
     const provider = this.spec.provider;
-    
+
     if (provider.aws) {
       return {
         type: 'AWS',
         service: provider.aws.service,
         region: provider.aws.region,
-        role: provider.aws.role
+        role: provider.aws.role,
       };
     }
-    
+
     if (provider.vault) {
       return {
         type: 'Vault',
         server: provider.vault.server,
         path: provider.vault.path,
         version: provider.vault.version || 'v2',
-        namespace: provider.vault.namespace
+        namespace: provider.vault.namespace,
       };
     }
-    
+
     if (provider.gcpsm) {
       return {
         type: 'GCP Secret Manager',
-        projectID: provider.gcpsm.projectID
+        projectID: provider.gcpsm.projectID,
       };
     }
-    
+
     if (provider.azurekv) {
       return {
         type: 'Azure Key Vault',
         vaultUrl: provider.azurekv.vaultUrl,
-        tenantId: provider.azurekv.tenantId
+        tenantId: provider.azurekv.tenantId,
       };
     }
-    
+
     if (provider.kubernetes) {
       return {
         type: 'Kubernetes',
-        server: provider.kubernetes.server?.url || 'In-cluster'
+        server: provider.kubernetes.server?.url || 'In-cluster',
       };
     }
-    
+
     return { type: 'Unknown' };
   }
 
-    static getReadyCount(stores: SecretStore[]): { ready: number; total: number } {
-      const ready = stores.filter(store => store.readyCondition === 'True').length;
-      return { ready, total: stores.length };
-    }
+  static getReadyCount(stores: SecretStore[]): { ready: number; total: number } {
+    const ready = stores.filter(store => store.readyCondition === 'True').length;
+    return { ready, total: stores.length };
+  }
 
-  static getProviderDistribution(stores: Array<{ providerType: string }>): Array<{ name: string; value: number }> {
+  static getProviderDistribution(
+    stores: Array<{ providerType: string }>
+  ): Array<{ name: string; value: number }> {
     const providerCounts = new Map<string, number>();
     stores.forEach(store => {
       const providerType = store.providerType;
       providerCounts.set(providerType, (providerCounts.get(providerType) || 0) + 1);
     });
-    
+
     return Array.from(providerCounts.entries()).map(([name, value]) => ({
       name,
-      value
+      value,
     }));
   }
 }

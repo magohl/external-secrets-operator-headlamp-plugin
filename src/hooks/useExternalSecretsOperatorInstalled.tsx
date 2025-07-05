@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { isExternalSecretsOperatorInstalled as checkExternalSecretsOperatorInstallation } from '../utils/externalSecretsOperatorInstallation';
 
 export function useExternalSecretsOperatorInstalled() {
-  const [isExternalSecretsOperatorInstalled, setIsExternalSecretsOperatorInstalled] = useState<boolean | null>(null);
+  const [isExternalSecretsOperatorInstalled, setIsExternalSecretsOperatorInstalled] = useState<
+    boolean | null
+  >(null);
 
   useEffect(() => {
     async function checkExternalSecretsOperatorInstalled() {
