@@ -1,0 +1,11 @@
+version: 0.1.0-beta1
+name: external-secrets-operator
+displayName: External Secrets Operator
+createdAt: '2025-07-05T05:35:50Z'
+logoURL: <Your Plugin Logo URL>
+description: <Your Plugin Description>
+annotations:
+  headlamp/plugin/archive-url: <Your Plugins Archive URL>
+  headlamp/plugin/archive-checksum: <Checksum of the tarball>
+  headlamp/plugin/version-compat: '>=0.22'
+  headlamp/plugin/distro-compat: in-cluster,web,docker-desktop,desktop
