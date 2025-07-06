@@ -87,10 +87,12 @@ export interface PushSecretStatusCondition {
 }
 
 export interface SyncedPushSecretsMap {
-  [remoteKey: string]: {
-    match?: {
-      [secretKey: string]: {
+  [storeRef: string]: {
+    [remoteKeyWithProperty: string]: {
+      conversionStrategy?: string;
+      match: {
         remoteRef: PushSecretRemoteRef;
+        secretKey?: string;
       };
     };
   };
@@ -214,7 +216,23 @@ export class PushSecret extends KubeObject<PushSecretCR> {
 
   // Check if a specific remote key has been successfully synced
   isRemoteKeySynced(remoteKey: string): boolean {
-    return this.syncedPushSecrets.hasOwnProperty(remoteKey);
+    const syncedSecrets = this.syncedPushSecrets;
+
+    // Check across all store references
+    for (const storeKey of Object.keys(syncedSecrets)) {
+      const storeSecrets = syncedSecrets[storeKey];
+
+      // Check if any of the synced entries match our remote key
+      for (const syncedKey of Object.keys(storeSecrets)) {
+        // The syncedKey format is "remoteKey/property" or just "remoteKey"
+        const [syncedRemoteKey] = syncedKey.split('/');
+        if (syncedRemoteKey === remoteKey) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   // Get sync status for all remote keys

@@ -60,8 +60,9 @@ export function PushSecretList() {
             id: 'sync-status',
             label: 'Synced Keys',
             getValue: (item): any => {
-              const totalKeys = item.getRemoteKeys().length;
-              const syncedKeys = Object.keys(item.syncedPushSecrets).length;
+              const syncStatus = item.getSyncStatus();
+              const totalKeys = syncStatus.length;
+              const syncedKeys = syncStatus.filter(s => s.synced).length;
 
               if (totalKeys === 0) return 'N/A';
 
