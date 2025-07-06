@@ -25,10 +25,10 @@ import { SecretStoreList } from './components/secretstore/List';
 import { ClusterExternalSecret } from './resources/ClusterExternalSecret';
 import { ExternalSecret } from './resources/ExternalSecret';
 
-// main entry
+// Main entry - root of the External Secrets Operator plugin
 registerSidebarEntry({
   parent: null,
-  name: 'root',
+  name: 'external-secrets-operator',
   label: 'External Secrets Operator',
   url: '/external-secrets-operator/overview',
   icon: 'mdi:cloud-security',
@@ -38,20 +38,17 @@ registerSidebarEntry({
 // --- Overview ---
 // -----------------------------------
 
-// External Secrets - Overview
 registerSidebarEntry({
-  parent: 'root',
-  name: 'overview',
+  parent: 'external-secrets-operator',
+  name: 'external-secrets-overview',
   url: '/external-secrets-operator/overview',
   label: 'Overview',
 });
 
-// External Secrets - List route
 registerRoute({
   path: '/external-secrets-operator/overview',
-  sidebar: 'overview',
-  parent: 'root',
-  name: 'overview',
+  sidebar: 'external-secrets-overview',
+  name: 'external-secrets-overview',
   component: () => <ExternalSecretsOperatorOverview />,
   exact: true,
 });
@@ -60,15 +57,13 @@ registerRoute({
 // --- External Secret ---
 // -----------------------------------
 
-// External Secrets - Sidebar entry
 registerSidebarEntry({
   name: 'external-secrets',
   url: '/external-secrets-operator/externalsecret',
-  parent: 'root',
+  parent: 'external-secrets-operator',
   label: 'External Secrets',
 });
 
-// External Secrets - List route
 registerRoute({
   path: '/external-secrets-operator/externalsecret',
   sidebar: 'external-secrets',
@@ -77,7 +72,6 @@ registerRoute({
   exact: true,
 });
 
-// External Secrets - Detail route
 registerRoute({
   path: '/external-secrets-operator/externalsecret/:namespace/:name',
   name: 'external-secret-detail',
@@ -86,7 +80,6 @@ registerRoute({
   hideSidebar: true,
 });
 
-// External Secrets - Action Processor
 registerDetailsViewHeaderActionsProcessor((resource: ExternalSecret, headerActions) => {
   if (resource?.kind === 'ExternalSecret') {
     return [RenderExternalSecretSyncActionButton(resource), ...headerActions];
@@ -98,15 +91,13 @@ registerDetailsViewHeaderActionsProcessor((resource: ExternalSecret, headerActio
 // --- Secret Store ---
 // -----------------------------------
 
-// Secret Store - Sidebar entry
 registerSidebarEntry({
   name: 'secret-stores',
   url: '/external-secrets-operator/secretstore',
-  parent: 'root',
+  parent: 'external-secrets-operator',
   label: 'Secret Stores',
 });
 
-// Secret Store - List route
 registerRoute({
   path: '/external-secrets-operator/secretstore',
   sidebar: 'secret-stores',
@@ -115,7 +106,6 @@ registerRoute({
   exact: true,
 });
 
-// Secret Store - Detail route
 registerRoute({
   path: '/external-secrets-operator/secretstore/:namespace/:name',
   name: 'secret-store-detail',
@@ -128,15 +118,13 @@ registerRoute({
 // --- Cluster Secret Store ---
 // -----------------------------------
 
-// Secret Store - Sidebar entry
 registerSidebarEntry({
   name: 'cluster-secret-stores',
   url: '/external-secrets-operator/clustersecretstore',
-  parent: 'root',
+  parent: 'external-secrets-operator',
   label: 'Cluster Secret Stores',
 });
 
-// Secret Store - List route
 registerRoute({
   path: '/external-secrets-operator/clustersecretstore',
   sidebar: 'cluster-secret-stores',
@@ -145,7 +133,6 @@ registerRoute({
   exact: true,
 });
 
-// Secret Store - Detail route
 registerRoute({
   path: '/external-secrets-operator/clustersecretstore/:name',
   name: 'cluster-secret-store-detail',
@@ -158,15 +145,13 @@ registerRoute({
 // --- Cluster External Secret ---
 // -----------------------------------
 
-// External Secrets - Sidebar entry
 registerSidebarEntry({
   name: 'cluster-external-secrets',
   url: '/external-secrets-operator/clusterexternalsecret',
-  parent: 'root',
+  parent: 'external-secrets-operator',
   label: 'Cluster External Secrets',
 });
 
-// Cluster External Secrets - List route
 registerRoute({
   path: '/external-secrets-operator/clusterexternalsecret',
   sidebar: 'cluster-external-secrets',
@@ -175,7 +160,6 @@ registerRoute({
   exact: true,
 });
 
-// Cluster External Secrets - Detail route
 registerRoute({
   path: '/external-secrets-operator/clusterexternalsecret/:name',
   name: 'cluster-external-secret-detail',
@@ -184,7 +168,6 @@ registerRoute({
   hideSidebar: true,
 });
 
-// Cluster External Secrets - Action Processor
 registerDetailsViewHeaderActionsProcessor((resource: ClusterExternalSecret, headerActions) => {
   if (resource?.kind === 'ClusterExternalSecret') {
     return [RenderClusterExternalSecretSyncActionButton(resource), ...headerActions];
@@ -196,15 +179,13 @@ registerDetailsViewHeaderActionsProcessor((resource: ClusterExternalSecret, head
 // --- Push Secret ---
 // -----------------------------------
 
-// Push Secrets - Sidebar entry
 registerSidebarEntry({
   name: 'push-secrets',
   url: '/external-secrets-operator/pushsecret',
-  parent: 'root',
+  parent: 'external-secrets-operator',
   label: 'Push Secrets',
 });
 
-// Push Secrets - List route
 registerRoute({
   path: '/external-secrets-operator/pushsecret',
   sidebar: 'push-secrets',
@@ -213,7 +194,6 @@ registerRoute({
   exact: true,
 });
 
-// Cluster External Secrets - Detail route
 registerRoute({
   path: '/external-secrets-operator/pushsecret/:namespace/:name',
   name: 'push-secret-detail',
@@ -226,15 +206,13 @@ registerRoute({
 // --- Cluster Push Secret ---
 // -----------------------------------
 
-// Cluster Push Secrets - Sidebar entry
 registerSidebarEntry({
   name: 'cluster-push-secrets',
   url: '/external-secrets-operator/clusterpushsecret',
-  parent: 'root',
+  parent: 'external-secrets-operator',
   label: 'Cluster Push Secrets',
 });
 
-// Cluster Push Secrets - List route
 registerRoute({
   path: '/external-secrets-operator/clusterpushsecret',
   sidebar: 'cluster-push-secrets',
@@ -243,7 +221,6 @@ registerRoute({
   exact: true,
 });
 
-// Cluster Push Secrets - Detail route
 registerRoute({
   path: '/external-secrets-operator/clusterpushsecret/:name',
   name: 'cluster-push-secret-detail',
