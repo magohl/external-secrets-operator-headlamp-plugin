@@ -1,4 +1,6 @@
 import { ApiProxy } from '@kinvolk/headlamp-plugin/lib';
+import { K8s } from '@kinvolk/headlamp-plugin/lib';
+import React from 'react';
 
 export async function getExternalSecretsOperatorApiVersions(): Promise<string[]> {
   try {
@@ -49,4 +51,47 @@ export async function getPreferredExternalSecretsApiVersion(): Promise<string | 
     console.error('Error getting preferred API version:', error);
     return null;
   }
+}
+
+export function useESOVersion() {
+  const [pods] = K8s.ResourceClasses.Pod.useList();
+
+  const version = React.useMemo(() => {
+    if (!pods) return null;
+
+    const esoController = pods.find(
+      pod => pod.metadata.labels?.['app.kubernetes.io/instance'] === 'external-secrets'
+    );
+
+    return esoController?.metadata?.labels?.['app.kubernetes.io/version'] || null;
+  }, [pods]);
+
+  return version;
+}
+
+export function useESOControllers() {
+  const [pods] = K8s.ResourceClasses.Pod.useList(); // No namespace filter
+
+  const controllers = React.useMemo(() => {
+    if (!pods) return null;
+
+    const esoControllers = pods.filter(
+      pod => pod.metadata.labels?.['app.kubernetes.io/instance'] === 'external-secrets'
+    );
+
+    const controllerStatus = {
+      total: esoControllers.length,
+      running: esoControllers.filter(pod => pod.status?.phase === 'Running').length,
+      controllers: esoControllers.map(pod => ({
+        name: pod.metadata.name,
+        namespace: pod.metadata.namespace,
+        status: pod.status?.phase || 'Unknown',
+        ready: pod.status?.phase === 'Running',
+      })),
+    };
+
+    return controllerStatus;
+  }, [pods]);
+
+  return controllers;
 }

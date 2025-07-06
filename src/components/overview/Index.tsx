@@ -1,5 +1,17 @@
-import { Link, SectionBox, TileChart } from '@kinvolk/headlamp-plugin/lib/components/common';
-import { Box, Typography } from '@mui/material';
+import {
+  Link,
+  SectionBox,
+  StatusLabel,
+  TileChart,
+} from '@kinvolk/headlamp-plugin/lib/components/common';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Icon,
+  Typography,
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { ClusterExternalSecret } from '../../resources/ClusterExternalSecret';
 import { ClusterPushSecret } from '../../resources/ClusterPushSecret';
@@ -7,6 +19,7 @@ import { ClusterSecretStore } from '../../resources/ClusterSecretStore';
 import { ExternalSecret } from '../../resources/ExternalSecret';
 import { PushSecret } from '../../resources/PushSecret';
 import { SecretStore } from '../../resources/SecretStore';
+import { useESOControllers, useESOVersion } from '../../utils/externalSecretsOperatorInstallation';
 import { ExternalSecretsOperatorInstallCheck } from '../common/CommonComponents';
 
 function ExternalSecretsOperatorOverviewChart({ title, resources, routeName }) {
@@ -66,6 +79,8 @@ function ExternalSecretsOperatorOverviewChart({ title, resources, routeName }) {
     return [];
   }
 
+  //TODO: Investigate as this are not 100% correct
+  // Warning: validateDOMNesting(...): <div> cannot appear as a descendant of <p>.
   function makeLegend() {
     if (resources && resources.length > 0) {
       const total = resources.length;
@@ -82,20 +97,15 @@ function ExternalSecretsOperatorOverviewChart({ title, resources, routeName }) {
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
-              <Box>
-                {ready}/{total} ready
-              </Box>
+              {ready}/{total} ready
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
-              <Box>
-                {notReady}/{total} not ready
-              </Box>
+              {notReady}/{total} not ready
             </Box>
           </Box>
         </Box>
       );
     }
-
     return (
       <Box>
         <Box>
@@ -145,6 +155,9 @@ function ExternalSecretsOperatorOverview() {
   const [pushSecrets, pushSecretsError] = PushSecret.useList();
   const [clusterPushSecrets, clusterPushSecretsError] = ClusterPushSecret.useList();
 
+  const esoVersion = useESOVersion();
+  const esoControllers = useESOControllers();
+
   const isLoading =
     externalSecrets === null ||
     secretStores === null ||
@@ -165,9 +178,8 @@ function ExternalSecretsOperatorOverview() {
     <ExternalSecretsOperatorInstallCheck>
       <Box p={3}>
         <Typography variant="h4" gutterBottom>
-          External Secrets Operator Overview
+          Overview
         </Typography>
-
         {isLoading ? (
           <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
             <Typography variant="h6" color="text.secondary">
@@ -193,45 +205,101 @@ function ExternalSecretsOperatorOverview() {
                 <ExternalSecretsOperatorOverviewChart
                   title="External Secrets"
                   resources={externalSecrets}
-                  routeName="/external-secrets-operator/externalsecret"
+                  routeName="External Secret List"
                 />
               </Box>
               <Box width="300px" m={2}>
                 <ExternalSecretsOperatorOverviewChart
                   title="Secret Stores"
                   resources={secretStores}
-                  routeName="/external-secrets-operator/secretstore"
+                  routeName="Secret Store List"
                 />
               </Box>
               <Box width="300px" m={2}>
                 <ExternalSecretsOperatorOverviewChart
                   title="Cluster Secret Stores"
                   resources={clusterSecretStores}
-                  routeName="/external-secrets-operator/clustersecretstore"
+                  routeName="Cluster Secret Store List"
                 />
               </Box>
               <Box width="300px" m={2}>
                 <ExternalSecretsOperatorOverviewChart
                   title="Cluster External Secrets"
                   resources={clusterExternalSecrets}
-                  routeName="/external-secrets-operator/clusterexternalsecret"
+                  routeName="Cluster External Secret List"
                 />
               </Box>
               <Box width="300px" m={2}>
                 <ExternalSecretsOperatorOverviewChart
                   title="Push Secrets"
                   resources={pushSecrets}
-                  routeName="/external-secrets-operator/pushsecret"
+                  routeName="Push Secret List"
                 />
               </Box>
               <Box width="300px" m={2}>
                 <ExternalSecretsOperatorOverviewChart
                   title="Cluster Push Secrets"
                   resources={clusterPushSecrets}
-                  routeName="/external-secrets-operator/clusterpushsecret"
+                  routeName="Cluster Push Secret List"
                 />
               </Box>
             </Box>
+          </SectionBox>
+        )}
+
+        <Typography variant="h4" gutterBottom>
+          Status
+        </Typography>
+        {esoControllers && esoControllers.total > 0 && (
+          <SectionBox title="">
+            <Accordion>
+              <AccordionSummary expandIcon={<Icon icon="mdi:chevron-down" />}>
+                <Box display="flex" alignItems="center" gap={3} width="100%">
+                  {esoVersion && (
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <Icon icon="mdi:tag" width={16} height={16} />
+                      <Typography variant="subtitle1" color="text.secondary">
+                        Version:
+                      </Typography>
+                      <StatusLabel status="success">{esoVersion}</StatusLabel>
+                    </Box>
+                  )}
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Icon icon="mdi:server" width={16} height={16} />
+                    <Typography variant="subtitle1" color="text.secondary">
+                      Controllers:
+                    </Typography>
+                    <StatusLabel
+                      status={
+                        esoControllers.running === esoControllers.total ? 'success' : 'warning'
+                      }
+                    >
+                      {esoControllers.running}/{esoControllers.total} running
+                    </StatusLabel>
+                  </Box>
+                </Box>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Box p={2}>
+                  {esoControllers.controllers.map((controller, index) => (
+                    <Box key={index} display="flex" alignItems="center" gap={2} mb={1}>
+                      <Link
+                        routeName="pod"
+                        params={{
+                          namespace: controller.namespace,
+                          name: controller.name,
+                        }}
+                      >
+                        {controller.name}
+                      </Link>
+                      <StatusLabel status={controller.ready ? 'success' : 'error'}>
+                        {controller.status}
+                      </StatusLabel>
+                    </Box>
+                  ))}
+                </Box>
+              </AccordionDetails>
+            </Accordion>
           </SectionBox>
         )}
       </Box>
