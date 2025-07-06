@@ -1,11 +1,11 @@
-version: 0.1.0-beta6
+version: 0.1.0-beta7
 name: external-secrets-operator
 displayName: External Secrets Operator
-createdAt: '2025-07-06T08:47:38Z'
+createdAt: '2025-07-06T13:11:31Z'
 logoURL: https://raw.githubusercontent.com/magohl/external-secrets-operator-headlamp-plugin/refs/heads/main/logo.png
 description: Headlamp plugin for External Secrets Operator
 annotations:
-  headlamp/plugin/archive-url: https://github.com/magohl/external-secrets-operator-headlamp-plugin/releases/download/0.1.0-beta6/external-secrets-operator-headlamp-plugin-0.1.0-beta6.tar.gz
-  headlamp/plugin/archive-checksum: SHA256:1db1bdb7b249c5520706e5d976e347ec58033014bf5f1eefa1e9cf3f22e00d32
+  headlamp/plugin/archive-url: https://github.com/magohl/external-secrets-operator-headlamp-plugin/releases/download/0.1.0-beta7/external-secrets-operator-headlamp-plugin-0.1.0-beta7.tar.gz
+  headlamp/plugin/archive-checksum: SHA256:efbe8d3b71c904b8bc361d03706c85b840a8cec1a8770afc39bb77c97d914a1d
   headlamp/plugin/version-compat: '>=0.22'
   headlamp/plugin/distro-compat: in-cluster,web,docker-desktop,desktop
